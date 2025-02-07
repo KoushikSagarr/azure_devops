@@ -1,55 +1,19 @@
 trigger:
-
-- master
-
+- main
 
 pool:
-
-
-  vmImage: 'ubuntu-latest'
-
-
-strategy:
-
-
-  matrix:
-
-
-    Python27:
-
-
-      python.version: '2.7'
-
-
+  name: Default  # Use the self-hosted agent pool
 
 steps:
-
-
 - task: UsePythonVersion@0
-
-
   inputs:
+    versionSpec: '3.x'
+  displayName: 'Set up Python'
 
+- script: |
+    python -m pip install --upgrade pip
+    if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+  displayName: 'Install Dependencies'
 
-    versionSpec: '$(python.version)'
-
-
-  displayName: 'Use Python $(python.version)'
-
-
-- script: python "addition.py"
-
-
-
-- task: PythonScript@0
-
-
-  inputs:
-
-
-    scriptSource: 'inline'
-
-
-    script: |
-      print('This is Section 1 Azure Demonstration')
-      print('KL-CSE')
+- script: python Azure_devops/addition.py
+  displayName: 'Run Python Script'
