@@ -1,19 +1,20 @@
 trigger:
-- main
+- main  # Run the pipeline when changes are pushed to the "main" branch
 
 pool:
-  name: Default  # Use the self-hosted agent pool
+  name: Default  
 
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.x'
+    versionSpec: '3.x'  # Use the latest Python 3 version
   displayName: 'Set up Python'
 
 - script: |
     python -m pip install --upgrade pip
-    if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-  displayName: 'Install Dependencies'
+    if exist requirements.txt pip install -r requirements.txt
+  displayName: 'Install dependencies'
 
 - script: python Azure_devops/addition.py
   displayName: 'Run Python Script'
+
